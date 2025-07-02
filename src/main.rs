@@ -4,7 +4,7 @@ use anyhow::Result;
 use config::Config;
 use simple_logger::SimpleLogger;
 
-const CONFIG_PATH: &str = "./config.toml";
+static CONFIG_PATH: &str = "./config.toml";
 
 fn main() -> Result<()> {
     SimpleLogger::new().init()?;
