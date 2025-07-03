@@ -1,6 +1,8 @@
 mod logger;
+mod raft;
 
 use logger::Logger;
+use raft::Raft;
 use serde::Deserialize;
 use std::fs;
 
@@ -8,6 +10,8 @@ use std::fs;
 pub struct Config {
     #[serde(default)]
     pub logger: Logger,
+    #[serde(default)]
+    pub raft: Raft,
 }
 
 impl Config {
