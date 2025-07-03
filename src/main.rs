@@ -1,7 +1,8 @@
 mod config;
+mod raft;
 
+use crate::{config::Config, raft::Raft};
 use anyhow::Result;
-use config::Config;
 use simple_logger::SimpleLogger;
 
 static CONFIG_PATH: &str = "./config.toml";
@@ -13,7 +14,7 @@ async fn main() -> Result<()> {
     SimpleLogger::new().init()?;
     log::set_max_level(config.logger.level);
 
-    log::info!("testing");
+    let raft = Raft::new(&config.raft)?;
 
     Ok(())
 }
