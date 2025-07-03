@@ -3,6 +3,8 @@ use std::net::SocketAddr;
 
 #[derive(Deserialize)]
 pub struct RaftConfig {
+    #[serde(default = "id::default")]
+    pub id: u64,
     #[serde(default = "listen_address::default")]
     pub listen_address: SocketAddr,
 }
@@ -15,9 +17,16 @@ pub mod listen_address {
     }
 }
 
+pub mod id {
+    pub fn default() -> u64 {
+        0
+    }
+}
+
 impl Default for RaftConfig {
     fn default() -> Self {
         RaftConfig {
+            id: id::default(),
             listen_address: listen_address::default(),
         }
     }
