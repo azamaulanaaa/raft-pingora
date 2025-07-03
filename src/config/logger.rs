@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct Logger {
+pub struct LoggerConfig {
     #[serde(default = "level::default", with = "level")]
     pub level: log::LevelFilter,
 }
@@ -29,9 +29,9 @@ pub mod level {
     }
 }
 
-impl Default for Logger {
+impl Default for LoggerConfig {
     fn default() -> Self {
-        Logger {
+        LoggerConfig {
             level: level::default(),
         }
     }

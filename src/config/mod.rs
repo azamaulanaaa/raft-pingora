@@ -1,17 +1,17 @@
 mod logger;
 mod raft;
 
-use logger::Logger;
-use raft::Raft;
+use logger::LoggerConfig;
+use raft::RaftConfig;
 use serde::Deserialize;
 use std::fs;
 
 #[derive(Deserialize, Default)]
 pub struct Config {
     #[serde(default)]
-    pub logger: Logger,
+    pub logger: LoggerConfig,
     #[serde(default)]
-    pub raft: Raft,
+    pub raft: RaftConfig,
 }
 
 impl Config {

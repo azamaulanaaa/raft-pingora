@@ -2,7 +2,7 @@ use serde::Deserialize;
 use std::net::SocketAddr;
 
 #[derive(Deserialize)]
-pub struct Raft {
+pub struct RaftConfig {
     #[serde(default = "listen_address::default")]
     pub listen_address: SocketAddr,
 }
@@ -15,9 +15,9 @@ pub mod listen_address {
     }
 }
 
-impl Default for Raft {
+impl Default for RaftConfig {
     fn default() -> Self {
-        Raft {
+        RaftConfig {
             listen_address: listen_address::default(),
         }
     }
