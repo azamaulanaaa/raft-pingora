@@ -8,10 +8,10 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn read_file<'a>(path: &'a str) -> anyhow::Result<Self> {
+    pub fn read_file(path: &str) -> anyhow::Result<Self> {
         let content = fs::read_to_string(path)?;
         let config = toml::from_str::<Self>(&content)?;
-        return Ok(config);
+        Ok(config)
     }
 }
 
@@ -30,7 +30,7 @@ mod logger {
         static LOG_LEVEL_NAMES: [&str; 6] = ["OFF", "ERROR", "WARN", "INFO", "DEBUG", "TRACE"];
 
         pub fn default() -> log::LevelFilter {
-            return log::LevelFilter::Info;
+            log::LevelFilter::Info
         }
 
         pub fn deserialize<'de, D>(deserializer: D) -> Result<log::LevelFilter, D::Error>
@@ -41,15 +41,15 @@ mod logger {
             let value = log::LevelFilter::from_str(value.as_str())
                 .map_err(|_| serde::de::Error::unknown_variant(value.as_str(), &LOG_LEVEL_NAMES))?;
 
-            return Ok(value);
+            Ok(value)
         }
     }
 }
 
 impl Default for Logger {
     fn default() -> Self {
-        return Logger {
+        Logger {
             level: logger::level::default(),
-        };
+        }
     }
 }

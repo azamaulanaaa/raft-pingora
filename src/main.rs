@@ -15,5 +15,5 @@ async fn main() -> Result<()> {
 
     log::info!("testing");
 
-    return Ok(());
+    Ok(())
 }
