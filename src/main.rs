@@ -6,7 +6,8 @@ use simple_logger::SimpleLogger;
 
 static CONFIG_PATH: &str = "./config.toml";
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let config = Config::read_file(CONFIG_PATH)?;
 
     SimpleLogger::new().init()?;
