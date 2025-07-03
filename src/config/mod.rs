@@ -1,8 +1,8 @@
 mod logger;
 mod raft;
 
-use logger::LoggerConfig;
-use raft::RaftConfig;
+pub use logger::LoggerConfig;
+pub use raft::RaftConfig;
 use serde::Deserialize;
 use std::fs;
 
