@@ -7,7 +7,7 @@ use std::{
 };
 use tokio::{sync::oneshot, task::JoinHandle, time};
 
-pub struct Clock<F, T>
+pub struct Timer<F, T>
 where
     F: FnMut() -> T + Send + Sync + 'static,
     T: Future<Output = ()> + Send + 'static,
@@ -18,13 +18,13 @@ where
     shutdown_tx: Option<oneshot::Sender<()>>,
 }
 
-impl<F, T> Clock<F, T>
+impl<F, T> Timer<F, T>
 where
     F: FnMut() -> T + Send + Sync + 'static,
     T: Future<Output = ()> + Send + 'static,
 {
     pub fn new(interval: Duration, callback: F) -> Self {
-        Clock {
+        Timer {
             interval,
             callback: Arc::new(Mutex::new(callback)),
             task_handle: None,

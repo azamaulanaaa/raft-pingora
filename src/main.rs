@@ -1,8 +1,8 @@
-mod clock;
 mod config;
 mod raft;
+mod timer;
 
-use crate::{clock::Clock, config::Config, raft::Raft};
+use crate::{config::Config, raft::Raft, timer::Timer};
 use anyhow::Result;
 use simple_logger::SimpleLogger;
 
@@ -17,13 +17,13 @@ async fn main() -> Result<()> {
 
     let raft = Raft::new(&config.raft)?;
 
-    let mut clock = Clock::new(std::time::Duration::from_secs(1), async || {
+    let mut timer = Timer::new(std::time::Duration::from_secs(1), async || {
         log::info!("Hello world!");
     });
-    clock.start()?;
-    clock.wait();
+    timer.start()?;
+    timer.wait();
     tokio::time::sleep(std::time::Duration::from_secs(5)).await;
-    clock.stop()?;
+    timer.stop()?;
 
     Ok(())
 }
