@@ -1,28 +1,32 @@
 use anyhow::{Result, anyhow};
 use futures::FutureExt;
-use std::{future::Future, sync::Arc, time::Duration};
+use std::{
+    future::Future,
+    sync::{Arc, Mutex},
+    time::Duration,
+};
 use tokio::{sync::oneshot, task::JoinHandle, time};
 
 pub struct Clock<F, T>
 where
-    F: Fn() -> T + Send + Sync + 'static,
+    F: FnMut() -> T + Send + Sync + 'static,
     T: Future<Output = ()> + Send + 'static,
 {
     interval: Duration,
-    callback: Arc<F>,
+    callback: Arc<Mutex<F>>,
     task_handle: Option<JoinHandle<()>>,
     shutdown_tx: Option<oneshot::Sender<()>>,
 }
 
 impl<F, T> Clock<F, T>
 where
-    F: Fn() -> T + Send + Sync + 'static,
+    F: FnMut() -> T + Send + Sync + 'static,
     T: Future<Output = ()> + Send + 'static,
 {
     pub fn new(interval: Duration, callback: F) -> Self {
         Clock {
             interval,
-            callback: Arc::new(callback),
+            callback: Arc::new(Mutex::new(callback)),
             task_handle: None,
             shutdown_tx: None,
         }
@@ -46,7 +50,10 @@ where
         let handle = tokio::spawn(async move {
             loop {
                 tokio::select! {
-                    _ = interval.tick() => callback().await,
+                    _ = interval.tick() => {{
+                        let mut callback = callback.lock().unwrap();
+                        callback()
+                    }.await;},
                     _ = &mut fused_shutdown_rx => break,
                 };
             }
